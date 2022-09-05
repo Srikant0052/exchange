@@ -4,7 +4,7 @@ const walletSchema = new mongoose.Schema({
 
 nameOfWallet :{
 
-    type:string,
+    type:String,
     required:true,
     unique:true,
     trim:true
@@ -17,6 +17,7 @@ walletId :{
     required:true,
     unique:true,
     trim:true
+
 },
 
 status:{

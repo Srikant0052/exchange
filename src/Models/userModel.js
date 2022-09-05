@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema({
     status: {
         type: Boolean,
         default: true
+    },
+
+    wallets : {
+        type : Number,
+        ref : 'Wallet',
+        required : true
     }
 
 }, { timestamps: true })

@@ -6,6 +6,7 @@ const transactionModel = new mongoose.Schema({
         type: Number,
         ref: 'User'
     },
+    
     credit: {
         type: String,
         required: true,

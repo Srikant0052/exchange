@@ -12,7 +12,7 @@ const register = async (req, res) => {
             })
         }
 
-        let { pubAddress } = req.body
+        let { pubAddress, wallets } = req.body
         let isUSerExist = await userModel.findOne({pubAddress : pubAddress})
 
         if (isUSerExist) {
@@ -25,13 +25,15 @@ const register = async (req, res) => {
 
         let newUser = {
             userId,
-            pubAddress
+            pubAddress,
+            wallets : Number(wallets)
         }
 
-        let resp = await userModel.create(newUser)
+        let resp = await (await userModel.create(newUser)).populate("wallets")
+        
         return res.status(200).send({
             message : 'registration successFull',
-            data : createdUser
+            data : resp
         })
 
 

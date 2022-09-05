@@ -24,7 +24,7 @@ try{
     let newWallet = {
 
         nameOfWallet:nameOfWallet,
-        walletId:random(),
+        walletId:Number(random(4, ["0", "9"])),
         status:true,
     }
 
@@ -33,16 +33,8 @@ try{
         return res.status(201).send({status:true, data:wallet})
     
 
-    
-
-
-
-
-
-    
-
 }catch(error){
-
+    console.log(error)
     return res.status(500).send("internal server error")
 }
 

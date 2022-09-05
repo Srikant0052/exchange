@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const app = express()
 let port  = 3000
 const userRoute = require('./src/Routes/userRoute')
+const walletRoutes = require('./src/Routes/walletRoutes')
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
-mongoose.connect("mongodb+srv://siamaq:admin@cluster0.shuoh8i.mongodb.net/test", {
+mongoose.connect("mongodb+srv://siamaq:admin@cluster0.shuoh8i.mongodb.net/surya", {
     useNewUrlParser: true
 })
 
@@ -16,6 +17,7 @@ mongoose.connect("mongodb+srv://siamaq:admin@cluster0.shuoh8i.mongodb.net/test",
 
 
 app.use('/', userRoute)
+app.use('/', walletRoutes)
 
 
 
