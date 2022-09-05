@@ -1,4 +1,3 @@
-
 const userModel = require('../Models/userModel')
 let { random } = require('../utils/helper')
 
@@ -12,8 +11,8 @@ const register = async (req, res) => {
             })
         }
 
-        let { pubAddress, wallets } = req.body
-        let isUSerExist = await userModel.findOne({pubAddress : pubAddress})
+        let { pubAddress } = req.body
+        let isUSerExist = await userModel.findOne({ pubAddress: pubAddress })
 
         if (isUSerExist) {
             return res.status(200).send({
@@ -32,15 +31,15 @@ const register = async (req, res) => {
         let resp = await userModel.create(newUser)
         
         return res.status(200).send({
-            message : 'registration successFull',
-            data : resp
+            message: 'registration successFull',
+            data: createdUser
         })
 
 
     } catch (error) {
         console.log(error)
         return res.status(500).send('internal server error')
-        
+
     }
 
 }

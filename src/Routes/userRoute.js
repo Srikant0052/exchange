@@ -7,7 +7,7 @@ const { register } = require('../Controller/userController')
 //     res.send('hellow from server')
 // })
 
-router.post('/login',register)
+router.post('/login', register)
 
 
 module.exports = router
