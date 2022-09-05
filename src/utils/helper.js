@@ -10,9 +10,6 @@ function random (length, ...ranges) {
     }
     return str;
 }
-const urlCode = random(4, ["0", "9"]);
-console.log(urlCode)
-
 module.exports = {
     random
 }

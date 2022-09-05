@@ -7,13 +7,13 @@ const register = async (req, res) => {
     try {
 
         if (Object.keys(req.body).length <= 0) {
-            res.status(400).send({
+            return res.status(400).send({
                 message: 'please provide public Address'
             })
         }
 
         let { pubAddress } = req.body
-        let isUSerExist = await userModel.findOne({ pubAddress })
+        let isUSerExist = await userModel.findOne({pubAddress : pubAddress})
 
         if (isUSerExist) {
             return res.status(200).send({
@@ -21,12 +21,15 @@ const register = async (req, res) => {
             })
         }
 
+        let userId = Number(random(4, ["0", "9"]))
+
         let newUser = {
-            userId : random(),
-            pubAddress : pubAddress,
+            userId,
+            pubAddress
         }
 
-        let createdUser = await userModel.create(newUser)
+        let resp = await userModel.create(newUser)
+        let createdUser = resp.lean()
         return res.status(200).send({
             message : 'registration successFull',
             data : createdUser
@@ -34,7 +37,9 @@ const register = async (req, res) => {
 
 
     } catch (error) {
+        console.log(error)
         return res.status(500).send('internal server error')
+        
     }
 
 }

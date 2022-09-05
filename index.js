@@ -15,8 +15,6 @@ mongoose.connect("mongodb+srv://siamaq:admin@cluster0.shuoh8i.mongodb.net/test",
 .catch ( () => console.log(err) )
 
 
-
-
 app.use('/', userRoute)
 
 
