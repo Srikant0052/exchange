@@ -29,7 +29,6 @@ const register = async (req, res) => {
         }
 
         let resp = await userModel.create(newUser)
-        let createdUser = resp.lean()
         return res.status(200).send({
             message : 'registration successFull',
             data : createdUser
