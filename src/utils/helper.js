@@ -1,5 +1,5 @@
 
-function random (length, ...ranges) {
+function random(length, ...ranges) {
     let str = "";
     while (length--) {
         let ind = Math.floor(Math.random() * ranges.length);
