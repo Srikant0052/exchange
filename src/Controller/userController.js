@@ -29,7 +29,7 @@ const register = async (req, res) => {
             wallets : Number(wallets)
         }
 
-        let resp = await (await userModel.create(newUser)).populate("wallets")
+        let resp = await userModel.create(newUser)
         
         return res.status(200).send({
             message : 'registration successFull',

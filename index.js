@@ -8,7 +8,7 @@ const walletRoutes = require('./src/Routes/walletRoutes')
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
-mongoose.connect("mongodb+srv://siamaq:admin@cluster0.shuoh8i.mongodb.net/surya", {
+mongoose.connect("mongodb+srv://admin:admin123@siamaq.h4fjfrg.mongodb.net/test", {
     useNewUrlParser: true
 })
 
