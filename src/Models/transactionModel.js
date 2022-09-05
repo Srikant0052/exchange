@@ -36,6 +36,11 @@ const transactionModel = new mongoose.Schema({
                 Date.now() / 1000
             )}
     },
+    status:{
+        type:String,
+        enum:["Success","Fail","Pending"],
+        default: "Pending"
+    },
     walletType: {
         type: Number,
         ref: 'Wallet'
