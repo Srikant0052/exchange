@@ -19,16 +19,10 @@ const transactionModel = new mongoose.Schema({
         required: true,
         default: 0
     },
-<<<<<<< HEAD
 
     balance:{
         type:Number,
         required:true
-=======
-    balance: {
-        type: Number,
-        required: true
->>>>>>> 82181e37ac564a490a58957160440a7cd40cda3d
     },
 
     description: {
@@ -55,16 +49,10 @@ const transactionModel = new mongoose.Schema({
             )
         }
     },
-<<<<<<< HEAD
     status:{
 
         type:String,
         enum:["Success","Fail","Pending"],
-=======
-    status: {
-        type: String,
-        enum: ["Success", "Fail", "Pending"],
->>>>>>> 82181e37ac564a490a58957160440a7cd40cda3d
         default: "Pending"
 
     },

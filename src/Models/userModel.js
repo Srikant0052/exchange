@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     wallets : {
         type : Number,
         ref : 'Wallet',
-        required : true
+        default : null
     }
 
 }, { timestamps: true })

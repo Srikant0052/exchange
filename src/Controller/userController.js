@@ -7,42 +7,61 @@ const register = async (req, res) => {
 
         if (Object.keys(req.body).length <= 0) {
             return res.status(400).send({
+                status : 400,
                 message: 'please provide public Address'
             })
         }
 
         let { pubAddress } = req.body
-        let isUSerExist = await userModel.findOne({ pubAddress: pubAddress })
+        let allUsers = await userModel.find()
 
-        if (isUSerExist) {
+        if (allUsers.map(e => e.pubAddress).includes(pubAddress)) {
             return res.status(200).send({
+                status : 200,
                 message: 'login successFul'
             })
         }
 
         let userId = Number(random(4, ["0", "9"]))
 
+        allUsers.forEach(e => {
+            if (e.userId == userId) {
+                userId = Number(random(4, ["0", "9"]))
+            }
+        })
+
         let newUser = {
             userId,
-            pubAddress,
-            wallets : Number(wallets)
+            pubAddress
         }
 
         let resp = await userModel.create(newUser)
-        
-        return res.status(200).send({
+        resp = resp.toObject()
+        delete resp._id
+        delete resp.createdAt
+        delete resp.updatedAt
+        delete resp.__v
+
+        return res.status(201).send({
+            status : 201,
             message: 'registration successFull',
-            data: createdUser
+            data: resp
         })
 
 
     } catch (error) {
+
         console.log(error)
-        return res.status(500).send('internal server error')
+        return res.status(500).send({
+            status: 500,
+            message: 'internal server Error'
+        })
 
     }
 
 }
+
+
 
 
 
