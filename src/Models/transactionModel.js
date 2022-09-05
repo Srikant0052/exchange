@@ -21,7 +21,7 @@ const transactionModel = new mongoose.Schema({
         required: true,
         trim: true
     },
-    transactionId:{
+    transactionId: {
         type: String,
         unique: true
     },
@@ -34,7 +34,8 @@ const transactionModel = new mongoose.Schema({
         default: unixTime = function unixTimestamp() {
             return Math.floor(
                 Date.now() / 1000
-            )}
+            )
+        }
     },
     walletType: {
         type: Number,
