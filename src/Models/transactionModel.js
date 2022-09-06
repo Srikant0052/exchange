@@ -20,9 +20,9 @@ const transactionModel = new mongoose.Schema({
         default: 0
     },
 
-    balance:{
-        type:Number,
-        required:true
+    balance: {
+        type: Number,
+        required: true
     },
 
     description: {
@@ -49,10 +49,10 @@ const transactionModel = new mongoose.Schema({
             )
         }
     },
-    status:{
+    status: {
 
-        type:String,
-        enum:["Success","Fail","Pending"],
+        type: String,
+        enum: ["Success", "Fail", "Pending"],
         default: "Pending"
 
     },
