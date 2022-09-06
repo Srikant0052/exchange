@@ -1,6 +1,7 @@
 const transactionModel = require('../Models/transactionModel');
 const walletModel = require('../Models/walletModel');
 const userModel = require('../Models/userModel');
+const { random } = require('../utils/helper');
 
 
 const deposit = async (req, res) => {
@@ -10,14 +11,22 @@ const deposit = async (req, res) => {
         const { publicAddress, credit, description } = requestBody;
 
 
-        const addTransaction = await transactionModel.create()
+        const user = await userModel.findOne({ userId });
 
+        if (!user) {
+            return res.status(404).send({ status: false, message: "Data not found" });
+        }
+        const transactionId = Number(random(4, ["0", "9"]));
+        const transactionNumber = Number(random(8, ["0", "9"]));
 
+        // const transactionDetails = await transactionModel.find
 
-        // depositData = {};
-        // if ("credit" in requestBody) {
+        const transactionData = {
+            userId, publicAddress, credit, description, transactionId: transactionId, transactionNumber: transactionNumber
+        }
+        const addTransaction = await transactionModel.create(transactionData);
 
-        // }
+        return res.status(201).send({ status: true, message: "Success", data: addTransaction });
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message });
@@ -29,6 +38,22 @@ const withdraw = async (req, res) => {
         const requestBody = req.body;
         const userId = req.params.userId;
         const { publicAddress, debit, description } = requestBody;
+
+        const user = await userModel.findOne({ userId });
+
+        if (!user) {
+            return res.status(404).send({ status: false, message: "Data not found" });
+        }
+
+        const transactionId = Number(random(4, ["0", "9"]));
+        const transactionNumber = Number(random(8, ["0", "9"]));
+
+        const transactionData = {
+            userId, publicAddress, debit, description, transactionId: transactionId, transactionNumber: transactionNumber
+        }
+        const addTransaction = await transactionModel.create(transactionData);
+
+        return res.status(201).send({ status: true, message: "Success", data: addTransaction });
 
 
     } catch (error) {
