@@ -27,7 +27,7 @@ function changeTimezone(date, ianatz) {
 var here = new Date();
 var there = changeTimezone(here, "Asia/Calcutta");
 
-console.log(`GMT: ${here.toString()}\nDayTimeDate: ${there.toString()}`);
+//console.log(`GMT: ${here.toString()}\nDayTimeDate: ${there.toString()}`);
 
 
 module.exports = {

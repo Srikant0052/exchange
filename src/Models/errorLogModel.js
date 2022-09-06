@@ -8,10 +8,10 @@ const errorLog = mongoose.Schema({
 
     errCode: {
         type: Number
-    },
+    }
 
-    
+
 
 }, { timestamps: true })
 
-module.exports = mongoose.model('errorLog', errorLog);
+//module.exports = mongoose.model('errorLog', errorLog);
