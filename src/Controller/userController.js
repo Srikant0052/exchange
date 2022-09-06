@@ -13,6 +13,8 @@ const register = async (req, res) => {
             })
         }
 
+        let _id;
+
         let { pubAddress } = req.body
         let allUsers = await userModel.find()
 
@@ -31,7 +33,10 @@ const register = async (req, res) => {
             }
         })
 
+        _id = allUsers.length + 1
+
         let newUser = {
+            _id,
             userId,
             pubAddress
         }
@@ -109,11 +114,21 @@ const addWallet = async (req, res) => {
 
 }
 
-// const getWallet
+
+
+const getUser = async (req, res) => {
+    try {
+        let allusers = await userModel.find().populate('wallets')
+        res.send(allusers)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).send('error')
+    }
+}
 
 
 module.exports = {
     register,
-    addWallet
-    // getWallet
+    addWallet,
+    getUser
 }

@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const walletSchema = new mongoose.Schema({
 
-    userId: {
-        type: Number,
-        ref: 'User'
-    },
-
     nameOfWallet: {
 
         type: String,
@@ -25,10 +20,6 @@ const walletSchema = new mongoose.Schema({
 
     },
 
-    status: {
-        type: Boolean,
-        default: false
-    },
 
 }, { timestamps: true })
 

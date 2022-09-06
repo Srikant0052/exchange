@@ -2,10 +2,11 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
 
-    userId: {
-        type: Number,
-        required: true,
-        unique: true
+    _id: Number,
+
+    userId : {
+        type :Number,
+        unique : true
     },
 
     pubAddress: {
@@ -18,16 +19,15 @@ const userSchema = new mongoose.Schema({
         default: true
     },
 
-    wallets : 
-        {   
-            type : Array,
-            _id : false,
-            walletId : Number,
-            ref : 'Wallet'
+    wallets:
+    {
+        type: Array,
+        _id: false,
+        walletId: Number,
+        ref: 'Wallet'
 
-        }
-    
-    
+    },
+
 
 }, { timestamps: true })
 
