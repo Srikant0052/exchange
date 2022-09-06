@@ -18,10 +18,10 @@ const userSchema = new mongoose.Schema({
         default: true
     },
 
-    wallets : {
-        type : Number,
-        ref : 'Wallet',
-        default : null
+    wallets: {
+        type: Number,
+        ref: 'walletId',
+        default: null
     }
 
 }, { timestamps: true })

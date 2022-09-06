@@ -40,8 +40,8 @@ const createWallet = async (req, res) => {
 
     } catch (error) {
         return res.status(500).send({
-            status : 500,
-            message : "Internal Server Error"
+            status: 500,
+            message: "Internal Server Error"
         })
     }
 

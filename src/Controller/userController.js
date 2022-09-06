@@ -7,7 +7,7 @@ const register = async (req, res) => {
 
         if (Object.keys(req.body).length <= 0) {
             return res.status(400).send({
-                status : 400,
+                status: 400,
                 message: 'please provide public Address'
             })
         }
@@ -17,7 +17,7 @@ const register = async (req, res) => {
 
         if (allUsers.map(e => e.pubAddress).includes(pubAddress)) {
             return res.status(200).send({
-                status : 200,
+                status: 200,
                 message: 'login successFul'
             })
         }
@@ -43,7 +43,7 @@ const register = async (req, res) => {
         delete resp.__v
 
         return res.status(201).send({
-            status : 201,
+            status: 201,
             message: 'registration successFull',
             data: resp
         })
