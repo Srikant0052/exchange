@@ -13,16 +13,21 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
-    status: {
+    isActive: {
         type: Boolean,
         default: true
     },
 
-    wallets : {
-        type : Number,
-        ref : 'Wallet',
-        default : null
-    }
+    wallets : 
+        {   
+            type : Array,
+            _id : false,
+            walletId : Number,
+            ref : 'Wallet'
+
+        }
+    
+    
 
 }, { timestamps: true })
 

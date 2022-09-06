@@ -21,12 +21,15 @@ const createWallet = async (req, res) => {
         let isnameOfWallet = await walletModel.findOne({ nameOfWallet })
 
         if (isnameOfWallet) {
-            return res.status(200).send("wallet created")
+            return res.status(201).send({
+                status : 201,
+                message : "wallet created"
+            })
         }
 
         let newWallet = {
             nameOfWallet: nameOfWallet,
-            walletId: Number(random(4, ["0", "9"])),
+            walletId: await walletModel.find().count() + 1,
             status: true,
         }
 
@@ -40,8 +43,8 @@ const createWallet = async (req, res) => {
 
     } catch (error) {
         return res.status(500).send({
-            status : 500,
-            message : "Internal Server Error"
+            status: 500,
+            message: "Internal Server Error"
         })
     }
 
