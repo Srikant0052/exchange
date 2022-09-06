@@ -43,7 +43,6 @@ const register = async (req, res) => {
 
         let resp = await userModel.create(newUser)
         resp = resp.toObject()
-        delete resp._id
         delete resp.createdAt
         delete resp.updatedAt
         delete resp.__v
@@ -91,12 +90,19 @@ const addWallet = async (req, res) => {
             })
         }
 
-        let updatedData = await userModel.findOneAndUpdate(
-            userId,
-            {
-                $addToSet: { wallets: { walletId } }
-            },
-            { new: true })
+        let walletById = await walletModel.findOne({ walletId: walletId }).select({ nameOfWallet: 1, walletId: 1, _id: 0 }).lean()
+
+        let userWallet = {
+
+            ...walletById,
+            credit: 0,
+            debit: 0,
+            balance: 0,
+            isActive: true
+            
+        }
+
+        let updatedData = await userModel.findOneAndUpdate({ userId: userId }, { $addToSet: { wallets: userWallet } }, { new: true })
 
         return res.status(201).send({
             status: 201,
@@ -117,13 +123,15 @@ const addWallet = async (req, res) => {
 
 
 const getUser = async (req, res) => {
+
     try {
-        let allusers = await userModel.find().populate('wallets')
+        let allusers = await userModel.find()
         res.send(allusers)
     } catch (error) {
         console.log(error)
         return res.status(400).send('error')
     }
+
 }
 
 

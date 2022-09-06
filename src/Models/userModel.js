@@ -21,11 +21,8 @@ const userSchema = new mongoose.Schema({
 
     wallets:
     {
-        type: Array,
-        _id: false,
-        walletId: Number,
-        ref: 'Wallet'
-
+        type: Array
+        
     },
 
 

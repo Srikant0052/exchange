@@ -8,7 +8,7 @@ const deposit = async (req, res) => {
     try {
         const requestBody = req.body;
         const userId = req.params.userId;
-        const { publicAddress, credit, description } = requestBody;
+        const { publicAddress, credit, description, walletId } = requestBody;
 
 
         const user = await userModel.findOne({ userId });
@@ -24,9 +24,26 @@ const deposit = async (req, res) => {
         const transactionData = {
             userId, publicAddress, credit, description, transactionId: transactionId, transactionNumber: transactionNumber
         }
+
+        let findUser = await userModel.findOne({ userId: userId })
+        if (!findUser) {
+            return res.status(404).send({
+                message: 'user not found'
+            })
+        }
+
+        let updateInUserWallet = await userModel.findOneAndUpdate({ userId: userId, "wallets.walletId": walletId },
+            {
+                $inc: {
+                    "wallets.$.credit": +credit,
+                    "wallets.$.balance": +credit
+                }
+            },
+            { new: true })
+
         const addTransaction = await transactionModel.create(transactionData);
 
-        return res.status(201).send({ status: true, message: "Success", data: addTransaction });
+        return res.status(201).send({ status: true, message: "Success", data: { addTransaction, updateInUserWallet } });
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message });

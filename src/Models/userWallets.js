@@ -2,26 +2,6 @@ const mongoose = require("mongoose");
 
 const walletSchema = new mongoose.Schema({
 
-    userId: {
-        type: Number,
-        ref: 'User'
-    },
-
-    balance : {
-        type : Number,
-        default : 0
-    },
-
-    credit : {
-        type : Number,
-        default : 0
-    },
-
-    debit : {
-        type : Number,
-        default : 0
-    },
-
     nameOfWallet: {
 
         type: String,
@@ -38,6 +18,21 @@ const walletSchema = new mongoose.Schema({
         unique: true,
         trim: true
 
+    },
+
+    balance : {
+        type : Number,
+        default : 0
+    },
+
+    credit : {
+        type : Number,
+        default : 0
+    },
+
+    debit : {
+        type : Number,
+        default : 0
     },
 
     isActive: {
