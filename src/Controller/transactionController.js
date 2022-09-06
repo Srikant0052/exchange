@@ -19,12 +19,12 @@ const deposit = async (req, res) => {
         const transactionId = Number(random(4, ["0", "9"]));
         const transactionNumber = Number(random(8, ["0", "9"]));
 
-        // const transactionDetails = await transactionModel.find
-
+        
         const transactionData = {
             userId, publicAddress, credit, description, transactionId: transactionId, transactionNumber: transactionNumber
         }
         const addTransaction = await transactionModel.create(transactionData);
+        const updatedWallet = await walletModel.findOneAndUpdate({})
 
         return res.status(201).send({ status: true, message: "Success", data: addTransaction });
 
