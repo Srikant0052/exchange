@@ -1,15 +1,21 @@
 const userLoginModel = require('../Models/userLoginModel');
 
-const userlogin = async (req, res) => {
+const userModel = require('../Models/userModel')
 
-    try {
+const userloginRecord = async(req, res)=>{
 
-    } catch (err) {
+try{
+     
+     
 
-        return res.status(500).send({ status: false, msg: "internal server error", data: MessageChannel.err })
-    }
+
+
+}catch(err){
+     console.log(err)
+    return res.status(500).send({status:false, msg:"internal server error", data:MessageChannel.err})
+}
 
 }
-module.exports = {
-    userlogin
+module.exports ={
+    userloginRecord
 }

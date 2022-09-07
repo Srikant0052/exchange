@@ -13,7 +13,7 @@ function random(length, ...ranges) {
 
 //---------------------------------------------------------------------------------------------------------------------------------
 
-function changeTimezone(date, ianatz) {
+function currentTime(date, ianatz) {
 
     var invdate = new Date(date.toLocaleString('en-US', {
         timeZone: ianatz
@@ -25,12 +25,12 @@ function changeTimezone(date, ianatz) {
 }
 
 var here = new Date();
-var there = changeTimezone(here, "Asia/Calcutta");
+var there = currentTime(here, "Australia/Hobart");
 
-//console.log(`GMT: ${here.toString()}\nDayTimeDate: ${there.toString()}`);
+console.log(`OurTimeZone: ${here.toLocaleTimeString()}\nYourTimeZone: ${there.toLocaleTimeString()}`);
 
 
 module.exports = {
     random,
-    changeTimezone
+    currentTime
 }
