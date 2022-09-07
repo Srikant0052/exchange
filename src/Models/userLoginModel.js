@@ -8,9 +8,8 @@ const loginSchema = new mongoose.Schema({
         ref: 'User'
     },
 
-    Desc: {
-        type: String,
-        required: true
+    Desc:{
+        type:String
     },
 
     status: {
