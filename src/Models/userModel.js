@@ -4,9 +4,9 @@ const userSchema = new mongoose.Schema({
 
     _id: Number,
 
-    userId : {
-        type :Number,
-        unique : true
+    userId: {
+        type: Number,
+        unique: true
     },
 
     pubAddress: {
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     wallets:
     {
         type: Array
-        
+
     },
 
 
