@@ -10,6 +10,27 @@ function random(length, ...ranges) {
     }
     return str;
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------
+
+function changeTimezone(date, ianatz) {
+
+    var invdate = new Date(date.toLocaleString('en-US', {
+        timeZone: ianatz
+    }));
+
+    var diff = date.getTime() - invdate.getTime();
+
+    return new Date(date.getTime() - diff);
+}
+
+var here = new Date();
+var there = changeTimezone(here, "Asia/Calcutta");
+
+//console.log(`GMT: ${here.toString()}\nDayTimeDate: ${there.toString()}`);
+
+
 module.exports = {
-    random
+    random,
+    changeTimezone
 }

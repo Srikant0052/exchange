@@ -16,10 +16,9 @@ const deposit = async (req, res) => {
         if (!user) {
             return res.status(404).send({ status: false, message: "Data not found" });
         }
+
         const transactionId = Number(random(4, ["0", "9"]));
         const transactionNumber = Number(random(8, ["0", "9"]));
-
-        // const transactionDetails = await transactionModel.find
 
         const transactionData = {
             userId, publicAddress, credit, description, transactionId: transactionId, transactionNumber: transactionNumber
@@ -35,8 +34,8 @@ const deposit = async (req, res) => {
         let updateInUserWallet = await userModel.findOneAndUpdate({ userId: userId, "wallets.walletId": walletId },
             {
                 $inc: {
-                    "wallets.$.credit": +credit,
-                    "wallets.$.balance": +credit
+                    "wallets.$.credit": + credit,
+                    "wallets.$.balance": + credit
                 }
             },
             { new: true })

@@ -32,6 +32,24 @@ const loginSchema = new mongoose.Schema({
 
         type:Date,
         default :Date.now()
+    },
+
+    tokenId:{
+        type:String,
+        default:0
+    },
+
+    tokenSecret:{
+        type:String,
+        default :0
+    },
+
+    tokenExpire:{
+        type:Boolean,
+        default:false
+    },
+    device:{
+        type:String
     }
 
 
