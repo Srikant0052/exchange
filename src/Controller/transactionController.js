@@ -29,6 +29,7 @@ const deposit = async (req, res) => {
             return res.status(404).send({
                 message: 'user not found'
             })
+
         }
 
         let updateInUserWallet = await userModel.findOneAndUpdate({ userId: userId, "wallets.walletId": walletId },
@@ -47,6 +48,7 @@ const deposit = async (req, res) => {
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message });
     }
+    
 }
 
 const withdraw = async (req, res) => {

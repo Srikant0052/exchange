@@ -1,16 +1,16 @@
 const userModel = require('../Models/userModel')
 const walletModel = require('../Models/walletModel')
 let { random } = require('../utils/helper')
+let { sign } = require('jsonwebtoken')
+const CreateError = require('http-errors')
 
-const register = async (req, res) => {
+
+const register = async (req, res, next) => {
 
     try {
 
         if (Object.keys(req.body).length <= 0) {
-            return res.status(400).send({
-                status: 400,
-                message: 'please provide public Address'
-            })
+            throw CreateError(400, 'Please Provide Public Address')
         }
 
         let _id;
@@ -18,11 +18,17 @@ const register = async (req, res) => {
         let { pubAddress } = req.body
         let allUsers = await userModel.find()
 
-        if (allUsers.map(e => e.pubAddress).includes(pubAddress)) {
+        let userByPubId = allUsers.find(e => e.pubAddress == pubAddress)
+
+        if (userByPubId) {
+
+            let token = sign({ userByPubId }, "secretKey", { expiresIn: '1h' })
             return res.status(200).send({
                 status: 200,
-                message: 'login successFul'
+                message: 'login successFul',
+                Token: token
             })
+
         }
 
         let userId = Number(random(4, ["0", "9"]))
@@ -42,6 +48,9 @@ const register = async (req, res) => {
         }
 
         let resp = await userModel.create(newUser)
+
+        let token = sign({ resp }, "secretKey", { expiresIn: '1h' })
+
         resp = resp.toObject()
         delete resp.createdAt
         delete resp.updatedAt
@@ -50,32 +59,25 @@ const register = async (req, res) => {
         return res.status(201).send({
             status: 201,
             message: 'registration successFull',
-            data: resp
+            data: resp,
+            Token: token
+
         })
 
 
     } catch (error) {
-
-        console.log(error)
-        return res.status(500).send({
-            status: 500,
-            message: 'internal server Error'
-        })
-
+        next(error)
     }
 
 }
 
 
-const addWallet = async (req, res) => {
+const addWallet = async (req, res, next) => {
 
     try {
 
         if (Object.keys(req.body).length <= 0) {
-            return res.status(400).send({
-                status: 400,
-                message: "invalid input params"
-            })
+            throw CreateError(400, 'Invalid Input Params')
         }
 
         let { userId, walletId } = req.body
@@ -84,10 +86,7 @@ const addWallet = async (req, res) => {
         let max = walletModel.find().count()
 
         if (walletId < min || walletId > max) {
-            return res.status(400).send({
-                status: 400,
-                message: "invalid wallet selection"
-            })
+            throw CreateError(400, 'Invalid Wallet Selection')
         }
 
         let walletById = await walletModel.findOne({ walletId: walletId }).select({ nameOfWallet: 1, walletId: 1, _id: 0 }).lean()
@@ -99,7 +98,7 @@ const addWallet = async (req, res) => {
             debit: 0,
             balance: 0,
             isActive: true
-            
+
         }
 
         let updatedData = await userModel.findOneAndUpdate({ userId: userId }, { $addToSet: { wallets: userWallet } }, { new: true })
@@ -112,24 +111,22 @@ const addWallet = async (req, res) => {
 
 
     } catch (error) {
-        return res.status(500).send({
-            status: 500,
-            message: "internal server Error"
-        })
+        next(error)
     }
 
 }
 
 
 
-const getUser = async (req, res) => {
+const getUser = async (req, res, next) => {
 
     try {
+
         let allusers = await userModel.find()
         res.send(allusers)
+
     } catch (error) {
-        console.log(error)
-        return res.status(400).send('error')
+        next(error)
     }
 
 }

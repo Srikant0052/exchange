@@ -10,8 +10,6 @@ const errorLog = mongoose.Schema({
         type: Number
     }
 
-
-
 }, { timestamps: true })
 
 //module.exports = mongoose.model('errorLog', errorLog);
