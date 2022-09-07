@@ -2,7 +2,7 @@ const userModel = require('../Models/userModel')
 const walletModel = require('../Models/walletModel')
 let { random } = require('../utils/helper')
 let { sign } = require('jsonwebtoken')
-const CreateError = require('http-errors')
+
 
 
 const register = async (req, res, next) => {
