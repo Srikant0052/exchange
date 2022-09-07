@@ -1,19 +1,14 @@
 const walletModel = require("../Models/walletModel");
-const { random } = require("../utils/helper");
+const CreateError = require('http-errors')
 
 
 
-const createWallet = async (req, res) => {
+const createWallet = async (req, res,next) => {
 
     try {
 
         if (Object.keys(req.body).length <= 0) {
-
-            return res.status(400).send({
-                status: 400,
-                message: "please provide valid wallet ttype"
-            })
-
+            throw CreateError(400, `Please provide valid wallet type`)
         }
 
         let { nameOfWallet } = req.body;
@@ -22,8 +17,8 @@ const createWallet = async (req, res) => {
 
         if (isnameOfWallet) {
             return res.status(201).send({
-                status : 201,
-                message : "wallet created"
+                status: 201,
+                message: "wallet created"
             })
         }
 
@@ -42,10 +37,7 @@ const createWallet = async (req, res) => {
 
 
     } catch (error) {
-        return res.status(500).send({
-            status: 500,
-            message: "Internal Server Error"
-        })
+        next(error)
     }
 
 }
