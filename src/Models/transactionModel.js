@@ -20,11 +20,6 @@ const transactionModel = new mongoose.Schema({
         default: 0
     },
 
-    // balance: {
-    //     type: Number,
-    //     required: true
-    // },
-
     description: {
         type: String,
         required: true,
