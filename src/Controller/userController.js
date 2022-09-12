@@ -17,14 +17,20 @@ const register = async (req, res, next) => {
 
         let _id;
 
-        let { pubAddress, email, password } = req.body
+        let { email, password, name, lastname } = req.body
 
-        if (!pubAddress || pubAddress.length < 42) {
-            throw CreateError(400, 'Please Provide a valid public address')
+        // if (!pubAddress || pubAddress.length < 42) {
+        //     throw CreateError(400, 'Please Provide a valid public address')
+        // }
+
+        let pubAddress;
+
+        if (!email) {
+            throw CreateError(400, `Email is required`)
         }
 
-        if (!email || !password) {
-            throw CreateError(400, `Email and password is required`)
+        if (!password) {
+            throw CreateError(400, `password is required`)
         }
 
         let allUsers = await userModel.find()
@@ -37,16 +43,6 @@ const register = async (req, res, next) => {
             })
         }
 
-        // if (userByPubId) {
-
-        //     let token = sign({ userByPubId }, "secretKey", { expiresIn: '1h' })
-        //     return res.status(200).send({
-        //         status: 200,
-        //         message: 'login successFul',
-        //         Token: token
-        //     })
-
-        // }
 
         let userId = Number(random(4, ["0", "9"]))
 
@@ -58,9 +54,13 @@ const register = async (req, res, next) => {
 
         _id = allUsers.length + 1
 
+        pubAddress = "gakjdfkuagkfgajgfjgajkghjkg"
+
         let newUser = {
             _id,
             userId,
+            name,
+            lastname,
             pubAddress,
             email,
             password
