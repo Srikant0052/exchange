@@ -9,6 +9,8 @@ const tRoutes = require('./src/Routes/transactionRoute')
 const userLogging = require('./src/Routes/userLoginRoute')
 const { notFound, errorHandler } = require('./src/utils/errors')
 
+
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 dotenv.config()
