@@ -9,6 +9,18 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
 
+    username: {
+        type: String
+    },
+
+    email: {
+        type: String
+    },
+
+    password: {
+        type: String
+    },
+
     pubAddress: {
         type: String,
         required: true
@@ -19,8 +31,7 @@ const userSchema = new mongoose.Schema({
         default: true
     },
 
-    wallets:
-    {
+    wallets: {
         type: Array
 
     },
