@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema({
 
     wallets: {
         type: Array
-
     },
 
 

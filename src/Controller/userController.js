@@ -17,25 +17,36 @@ const register = async (req, res, next) => {
 
         let _id;
 
-        let { pubAddress } = req.body
+        let { pubAddress, email, password } = req.body
 
         if (!pubAddress || pubAddress.length < 42) {
             throw CreateError(400, 'Please Provide a valid public address')
         }
 
+        if (!email || !password) {
+            throw CreateError(400, `Email and password is required`)
+        }
+
         let allUsers = await userModel.find()
-        let userByPubId = allUsers.find(e => e.pubAddress == pubAddress)
+        let userByPubId = allUsers.find(e => e.pubAddress == pubAddress || e.email == email)
 
         if (userByPubId) {
-
-            let token = sign({ userByPubId }, "secretKey", { expiresIn: '1h' })
-            return res.status(200).send({
-                status: 200,
-                message: 'login successFul',
-                Token: token
+            res.status(409)
+            res.json({
+                message: `User Is Already Registered`
             })
-
         }
+
+        // if (userByPubId) {
+
+        //     let token = sign({ userByPubId }, "secretKey", { expiresIn: '1h' })
+        //     return res.status(200).send({
+        //         status: 200,
+        //         message: 'login successFul',
+        //         Token: token
+        //     })
+
+        // }
 
         let userId = Number(random(4, ["0", "9"]))
 
@@ -50,12 +61,12 @@ const register = async (req, res, next) => {
         let newUser = {
             _id,
             userId,
-            pubAddress
+            pubAddress,
+            email,
+            password
         }
 
         let resp = await userModel.create(newUser)
-
-        let token = sign({ resp }, "secretKey", { expiresIn: '1h' })
 
         resp = resp.toObject()
         delete resp.createdAt
@@ -63,13 +74,56 @@ const register = async (req, res, next) => {
         delete resp.__v
 
         return res.status(201).send({
+
             status: 201,
             message: 'registration successFull',
-            data: resp,
-            Token: token
+            data: resp
 
         })
 
+
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+const Login = async (req, res, next) => {
+
+    try {
+
+        if (!isValidRequestBody(req.body)) {
+            throw CreateError(400, 'invalid request Parameters')
+        }
+
+        console.log(req.body)
+
+        let { email, password } = req.body
+
+        if (!email || !password) {
+            throw CreateError(400, `Please Enter Valid Credintials`)
+        }
+
+        let isUserExist = await userModel.findOne({ email: email }).select({
+            password: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            __v: 0
+        })
+
+        if (!isUserExist) {
+            throw CreateError(404, `user not found please cheack credintials`)
+        }
+
+        console.log(isUserExist)
+
+        let token = sign({ ...isUserExist._doc }, "secretKey", { expiresIn: '1h' })
+
+        return res.status(200).send({
+            status: 200,
+            message: 'login successFul',
+            token: token
+        })
 
     } catch (error) {
         next(error)
@@ -181,6 +235,8 @@ module.exports = {
 
     register,
     addWallet,
-    getUser
+    getUser,
+    Login,
+    getUserByID
 
 }

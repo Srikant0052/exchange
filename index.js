@@ -1,13 +1,16 @@
 const express = require('express')
 const mongoose = require('mongoose');
 const app = express()
-let port = 3000
+const cors = require('cors')
+let port = 4000
 const userRoute = require('./src/Routes/userRoute')
 const walletRoutes = require('./src/Routes/walletRoutes')
 const tRoutes = require('./src/Routes/transactionRoute')
 const userLogging = require('./src/Routes/userLoginRoute')
 const { notFound, errorHandler } = require('./src/utils/errors')
 
+
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
