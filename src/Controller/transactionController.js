@@ -1,7 +1,8 @@
 const transactionModel = require('../Models/transactionModel');
 const userModel = require('../Models/userModel');
 const { random } = require('../utils/helper');
-const CreateError = require('http-errors')
+const CreateError = require('http-errors');
+const { isValid, isValidRequestBody } = require('../utils/validator');
 
 
 const deposit = async (req, res, next) => {
@@ -10,7 +11,18 @@ const deposit = async (req, res, next) => {
 
         const requestBody = req.body;
         const userId = req.params.userId;
+
+        if(!isValidRequestBody(requestBody)){
+            throw CreateError(400, "Field can't be empty!");
+        }
         const { publicAddress, credit, description, walletId } = requestBody;
+
+        if(!isValid(credit)){
+            throw CreateError(400, "Please Enter Amount!");
+        }
+        if(!isValid(description)){
+            throw CreateError(400, "Please Give Description!");
+        }
 
         const transactionId = Number(random(4, ["0", "9"]));
         const transactionNumber = Number(random(8, ["0", "9"]));
@@ -50,12 +62,24 @@ const withdraw = async (req, res) => {
         const requestBody = req.body;
         const userId = req.params.userId;
         let flag = false;
+
+        if(!isValidRequestBody(requestBody)){
+            throw CreateError(400, "Field can't be empty!");
+        }
+
         const { publicAddress, debit, description, walletId } = requestBody;
+
+        if(!isValid(debit)){
+            throw CreateError(400, "Please Enter Amount!");
+        }
+        if(!isValid(description)){
+            throw CreateError(400, "Please Give Description!");
+        }
 
         const user = await userModel.findOne({ userId });
 
         if (!user) {
-            throw CreateError(404, 'User Not Found')
+            throw CreateError(404, 'User Not Found');
         }
 
         user["wallets"].forEach(element => {
@@ -65,7 +89,7 @@ const withdraw = async (req, res) => {
         });
 
         if (!flag) {
-            throw CreateError(400, 'Insufficient Balance')
+            throw CreateError(400, 'Insufficient Balance');
         }
 
         const transactionId = Number(random(4, ["0", "9"]));
