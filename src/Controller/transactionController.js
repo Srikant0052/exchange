@@ -6,6 +6,7 @@ const { isValid, isValidRequestBody } = require('../utils/validator');
 
 
 const deposit = async (req, res, next) => {
+
     try {
 
         const requestBody = req.body;

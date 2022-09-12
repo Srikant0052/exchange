@@ -1,23 +1,26 @@
-const jwt = require('jsonwebtoken')
+const { verify } = require('jsonwebtoken')
+const CreateError = require('http-errors')
 
-const verifyjwt = async (req, res, next)=>{
+const verifyjwt = async (req, res, next) => {
 
-    try{
+    try {
+
         const token = req.cookies;
 
-        if (!token) return res.status(401).send({status:false, msg:"Unauthorize user"})
+        if (!token) {
+            throw CreateError[401]
+        }
+        
+        const decodedToken = verify(token, "secret-key")
+        req['loggedInUser'] = decodedToken['userByPubId']
+        next()
 
-        const decodedToken = jwt.verify(token, "secret-key")
-        req.user = decodedToken
-          next()
-    }catch(error){
-
-        console.log(error)
-        return res.status(500).send({status:false, msg:"Internal Server Error", data:MessageChannel.error})
+    } catch (error) {
+        next(error)
     }
 }
 
-module.exports={
+module.exports = {
     verifyjwt
 }
 

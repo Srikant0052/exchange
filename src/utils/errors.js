@@ -1,14 +1,25 @@
 
 const createError = require('http-errors')
-const logger = require('../config/logger');
+const errorLog = require('../Models/errorLogModel')
+const moment = require('moment')
 
 const notFound = (req, res, next) => {
     next(createError(404, 'The Page You are Looking for is Not Found'))
-    logger.error(`404 || ${res.statusMessage} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
 }
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = async (err, req, res, next) => {
 
+    let errorData = {
+
+        _id: await errorLog.find().count() + 1,
+        errMsg: err.message,
+        errCode: err.status || 500,
+        userIp: req.ip,
+        timestamp: moment().format('LLLL')
+
+    }
+
+    await errorLog.create(errorData)
     res.status(err.status || 500)
     res.send({
         error: {
@@ -16,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
             message: err.message
         }
     })
-    logger.error(`${err.status || 500} - ${res.statusMessage} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+
 }
 
 /*                                          Exporting To Index.js                                        */

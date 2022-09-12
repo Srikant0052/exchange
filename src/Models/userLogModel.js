@@ -2,57 +2,58 @@ const mongoose = require('mongoose');
 
 const loginSchema = new mongoose.Schema({
 
-    userId :{
-        type:Number,
-        required:true,
-        ref:'User'
+    userId: {
+        type: Number,
+        required: true,
+        ref: 'User'
     },
 
-    Desc:{
-        type:String,
-        required:true
+    Desc: {
+        type: String,
+        required: true
     },
 
-    status:{
-        type:Boolean,
-        default:false
+    status: {
+        type: Boolean,
+        default: false
     },
 
-    IP:{
-        type:String
+    IP: {
+        type: String
     },
 
-    loggedInAt:{
+    loggedInAt: {
 
-        type:Date,
-        default:Date.now()
+        type: Date,
+        default: Date.now()
     },
 
-    loggedOutAt:{
+    loggedOutAt: {
 
-        type:Date,
-        default :Date.now()
+        type: Date,
+        default: Date.now()
     },
 
-    tokenId:{
-        type:String,
-        default:0
+    tokenId: {
+        type: String,
+        default: 0
     },
 
-    tokenSecret:{
-        type:String,
-        default :0
+    tokenSecret: {
+        type: String,
+        default: 0
     },
 
-    tokenExpire:{
-        type:Boolean,
-        default:false
+    tokenExpire: {
+        type: Boolean,
+        default: false
     },
-    device:{
-        type:String
+    
+    device: {
+        type: String
     }
 
 
-},{timestamps:true})
+}, { timestamps: true })
 
 module.exports = mongoose.model('UserLogin', loginSchema)

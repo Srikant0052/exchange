@@ -1,12 +1,11 @@
-const userLoginModel = require('../Models/userLoginModel');
 
-const userModel = require('../Models/userModel')
+
 
 const userloginRecord = async(req, res)=>{
 
 try{
      
-     
+     console.log(req.ip, req.url, req.method, req.hostname)
 
 
 
