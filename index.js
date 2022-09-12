@@ -1,8 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose');
 const app = express()
-const cors = require('cors')
-let port = 4000
+const dotenv = require("dotenv")
+
 const userRoute = require('./src/Routes/userRoute')
 const walletRoutes = require('./src/Routes/walletRoutes')
 const tRoutes = require('./src/Routes/transactionRoute')
@@ -13,8 +13,11 @@ const { notFound, errorHandler } = require('./src/utils/errors')
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+dotenv.config()
+let port = process.env.port;
+const Data_Base_Url= process.env.Data_Base_Url
 
-mongoose.connect("mongodb+srv://admin:admin123@siamaq.h4fjfrg.mongodb.net/test", {
+mongoose.connect(Data_Base_Url, {
     useNewUrlParser: true
 })
 
