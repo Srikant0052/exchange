@@ -37,8 +37,8 @@ const register = async (req, res, next) => {
         let userByPubId = allUsers.find(e => e.pubAddress == pubAddress || e.email == email)
 
         if (userByPubId) {
-            res.status(409)
-            res.json({
+            return res.status(409)
+            .send({
                 message: `User Is Already Registered`
             })
         }
@@ -109,7 +109,7 @@ const Login = async (req, res, next) => {
             createdAt: 0,
             updatedAt: 0,
             __v: 0
-        })
+        }).lean()
 
         if (!isUserExist) {
             throw CreateError(404, `user not found please cheack credintials`)
@@ -122,7 +122,10 @@ const Login = async (req, res, next) => {
         return res.status(200).send({
             status: 200,
             message: 'login successFul',
-            token: token
+            user: {
+                userId: isUserExist._id,
+                token: token
+            }
         })
 
     } catch (error) {
@@ -202,17 +205,13 @@ const getUser = async (req, res, next) => {
 const getUserByID = async (req, res, next) => {
     try {
 
-        if (!isValidRequestBody(req.body)) {
-            throw CreateError(400, `invalid request parameteres`)
-        }
+        let userId  = req.params.id
 
-        let { userId } = req.params
+        // if (!isValid(userId)) {
+        //     throw CreateError(400, `please enter a valid user id`)
+        // }
 
-        if (!isValid(userId)) {
-            throw CreateError(400, `please enter a valid user id`)
-        }
-
-        let userById = await userModel.findOne(userId)
+        let userById = await userModel.findById(userId)
 
         if (!userById) {
             throw CreateError(400, 'user Not Found')

@@ -1,6 +1,6 @@
 
 const router = require('express').Router()
-const { register, addWallet, getUser, Login } = require('../Controller/userController')
+const { register, addWallet, getUser, Login, getUserByID } = require('../Controller/userController')
 
 
 // router.get('/testing', (req, res) => {
@@ -10,6 +10,7 @@ const { register, addWallet, getUser, Login } = require('../Controller/userContr
 router.post('/register', register)
 router.post('/addwallet', addWallet)
 router.get('/getUser', getUser)
+    .get('/getuserbyid/:id', getUserByID)
     .post('/login', Login)
 
 module.exports = router
