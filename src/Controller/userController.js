@@ -1,9 +1,11 @@
 const userModel = require('../Models/userModel')
 const walletModel = require('../Models/walletModel')
-let { random } = require('../utils/helper')
+let { random, mailer } = require('../utils/helper')
 let { sign } = require('jsonwebtoken')
 let { isValidRequestBody, isValid } = require('../utils/validator')
 const CreateError = require('http-errors')
+const otpModel = require('../Models/otpModel')
+const nodemailer = require("nodemailer")
 
 
 
@@ -234,13 +236,83 @@ const getUserByID = async (req, res, next) => {
     }
 }
 
+const emailSend = async (req, res, next) => {
 
-module.exports = {
+    try {
 
-    register,
-    addWallet,
-    getUser,
-    Login,
-    getUserByID
+        let data = await userModel.findOne({ email: req.body.email })
 
-}
+        // const response = {}
+        let otpCode;
+
+        if (data) {
+
+            otpCode = Number(random(4, ["0", "9"]))
+        } else {
+            return res.status(404).send({
+                message: "email is not present in Database"
+            })
+        }
+
+        let otpData = {
+
+            email: req.body.email,
+            code: otpCode,
+            expireIn: new Date().getTime() + 300 * 1000
+
+        }
+
+        let resp = await otpModel.create(otpData)
+        mailer(data.email, data.code)
+
+        respData = resp.toObject();
+        return res.status(201).send({
+            message: "email succesfully created",
+            data: respData
+
+        })}catch(error){
+            next(error)
+        }
+    }
+
+ const changePassword = async (req, res, next) => {
+
+        try {
+
+            let data = await otpModel.findOne({ email: req.body.email, code: req.body.code })
+            // const response = {}
+          console.log(data)
+            if (data) {
+                let currentTime = new Date().getTime()
+                let diff = data.expireIn - currentTime
+
+                if (diff < 0) {
+                    return res.status(400).send({ message: "token is expired" })
+                } else {
+                    let user = await userModel.find({ email: req.body.email })
+                    user.password = req.body.password
+                    let resp = await userModel.create(user)
+                    return res.status(200).send({
+                        message: "password change successfully",
+                        data: resp
+                    })
+
+                }
+            }
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+    module.exports = {
+
+        register,
+        addWallet,
+        getUser,
+        Login,
+        getUserByID,
+        emailSend,
+        changePassword
+
+    }

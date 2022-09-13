@@ -12,5 +12,8 @@ router.post('/addwallet', addWallet)
 router.get('/getUser', getUser)
     .get('/getuserbyid/:id', getUserByID)
     .post('/login', Login)
+    router.post("/email-send", emailSend)
+    router.post("/change-password", changePassword)
+
 
 module.exports = router
