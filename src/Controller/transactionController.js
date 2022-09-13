@@ -31,7 +31,7 @@ const deposit = async (req, res, next) => {
             userId, publicAddress, credit, description, transactionId: transactionId, transactionNumber: transactionNumber
         }
 
-        let findUser = await userModel.findOne({ userId: userId })
+        let findUser = await userModel.findById({ _id: userId })
 
         if (!findUser) {
             throw CreateError(404, "User Not Found")
@@ -39,7 +39,7 @@ const deposit = async (req, res, next) => {
 
         const addTransaction = await transactionModel.create(transactionData);
 
-        let updateInUserWallet = await userModel.findOneAndUpdate({ userId: userId, "wallets.walletId": walletId },
+        let updateInUserWallet = await userModel.findOneAndUpdate({ _id: userId, "wallets.walletId": walletId },
             {
                 $inc: {
                     "wallets.$.credit": + credit,

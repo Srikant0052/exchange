@@ -3,7 +3,7 @@ const CreateError = require('http-errors')
 
 
 
-const createWallet = async (req, res,next) => {
+const createWallet = async (req, res, next) => {
 
     try {
 
@@ -11,9 +11,9 @@ const createWallet = async (req, res,next) => {
             throw CreateError(400, `Please provide valid wallet type`)
         }
 
-        let { nameOfWallet } = req.body;
+        let { nameOfWallet, shortName, logo, network, networkLink } = req.body;
 
-        let isnameOfWallet = await walletModel.findOne({ nameOfWallet })
+        let isnameOfWallet = await walletModel.findOne({ shortName })
 
         if (isnameOfWallet) {
             return res.status(201).send({
@@ -25,6 +25,10 @@ const createWallet = async (req, res,next) => {
         let newWallet = {
             nameOfWallet: nameOfWallet,
             walletId: await walletModel.find().count() + 1,
+            logo: logo,
+            shortName:shortName,
+            network: network,
+            networkLink: networkLink,
             status: true,
         }
 

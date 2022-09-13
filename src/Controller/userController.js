@@ -38,9 +38,9 @@ const register = async (req, res, next) => {
 
         if (userByPubId) {
             return res.status(409)
-            .send({
-                message: `User Is Already Registered`
-            })
+                .send({
+                    message: `User Is Already Registered`
+                })
         }
 
 
@@ -162,12 +162,17 @@ const addWallet = async (req, res, next) => {
 
         let walletById = await walletModel.findOne({ walletId: walletId }).select({ nameOfWallet: 1, walletId: 1, _id: 0 }).lean()
 
+        const num = 0;
+        let decimalPoint = function insertDecimal(num) {
+            return (num / 100).toFixed(8);
+        }
+        console.log(decimalma)
         let userWallet = {
 
             ...walletById,
-            credit: 0,
-            debit: 0,
-            balance: 0,
+            credit: decimalPoint,
+            debit: decimalPoint,
+            balance: decimalPoint,
             isActive: true
 
         }
@@ -205,7 +210,7 @@ const getUser = async (req, res, next) => {
 const getUserByID = async (req, res, next) => {
     try {
 
-        let userId  = req.params.id
+        let userId = req.params.id
 
         // if (!isValid(userId)) {
         //     throw CreateError(400, `please enter a valid user id`)
