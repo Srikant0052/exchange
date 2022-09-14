@@ -1,6 +1,6 @@
 
 const router = require('express').Router()
-const { register, addWallet, getUser, Login, getUserByID } = require('../Controller/userController')
+const { register, addWallet, getUser, Login, getUserByID ,emailSend, changePassword} = require('../Controller/userController')
 
 
 // router.get('/testing', (req, res) => {
