@@ -1,6 +1,7 @@
 
 
 const nodemailer = require("nodemailer")
+require("dotenv").config()
 function random(length, ...ranges) {
     let str = "";
     while (length--) {
@@ -40,19 +41,19 @@ let mailTransporter = nodemailer.createTransport({
     requireTls:true,
 
     auth: {
-        user: 'kumarRahul@siamaq.live',
-        password: 'kumar123456'
+        user: 'process.env.USER',
+        password: 'process.env.PASS'
     }
 });
  
 let mailDetails = {
-    from: 'kumarRahul@siamaq.live',
+    from: 'data.email',
     to: 'rahulkumarkiit94@gmail.com',
     subject: 'Test mail',
     text: 'Node.js testing mail for cryptoExchange'
 };
  
-mailTransporter.sendMail(mailDetails, function(err, data) {
+mailTransporter.sendMail(mailDetails, (err, data)=> {
     if(err) {
         console.log('Error Occurs');
     } else {
@@ -61,7 +62,7 @@ mailTransporter.sendMail(mailDetails, function(err, data) {
 });
 }
 
-mailer("rahulkumarkiit94@gmail.com", "2188")
+
 module.exports = {
     random,
     currentTime,
