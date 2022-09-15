@@ -1,18 +1,18 @@
 const { verify } = require('jsonwebtoken')
 const CreateError = require('http-errors')
 
-const verifyjwt = async (req, res, next) => {
+const protected = async (req, res, next) => {
 
     try {
 
-        const token = req.cookies;
-
-        if (!token) {
-            throw CreateError[401]
-        }
+        const token = (req.headers['accessToken'] || req.headers['accesstoken'])
         
-        const decodedToken = verify(token, "secret-key")
-        req['loggedInUser'] = decodedToken['userByPubId']
+        if (!token) {
+            throw CreateError.Unauthorized('please Provide Token In Header')
+        }
+
+        const decodedToken = verify(token, "secretKey")
+        req['loggedInUser'] = decodedToken
         next()
 
     } catch (error) {
@@ -21,6 +21,6 @@ const verifyjwt = async (req, res, next) => {
 }
 
 module.exports = {
-    verifyjwt
+    protected
 }
 

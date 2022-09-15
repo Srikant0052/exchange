@@ -19,25 +19,34 @@ const walletSchema = new mongoose.Schema({
         trim: true
 
     },
-    shortName:{
+
+    shortName: {
         type: String,
         required: true,
-        unique:true,
+        unique: true,
         trim: true
     },
+
     logo: {
         type: String,
         required: true,
-        unique:true,
+        unique: true,
         trim: true
     },
+
     network: {
         type: String,
         required: true,
         trim: true
     },
+
     networkLink: {
         type: String,
+    },
+
+    balance: {
+        type: Number,
+        default: null
     }
 
 

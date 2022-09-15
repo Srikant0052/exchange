@@ -117,7 +117,7 @@ const Login = async (req, res, next) => {
 
         console.log(isUserExist)
 
-        let token = sign({ ...isUserExist._doc }, "secretKey", { expiresIn: '1h' })
+        let token = sign({ ...isUserExist }, "secretKey", { expiresIn: '1h' })
 
         return res.status(200).send({
             status: 200,
@@ -145,6 +145,8 @@ const addWallet = async (req, res, next) => {
 
         let { userId, walletId } = req.body
 
+        console.log(req.body)
+
         if (!isValid(userId)) {
             throw CreateError(400, `userId is required`)
         }
@@ -161,24 +163,21 @@ const addWallet = async (req, res, next) => {
         }
 
         let walletById = await walletModel.findOne({ walletId: walletId }).select({ nameOfWallet: 1, walletId: 1, _id: 0 }).lean()
-
-        const num = 0;
-        let decimalPoint = function insertDecimal(num) {
-            return (num / 100).toFixed(8);
-        }
-        console.log(decimalma)
+        console.log(walletById)
         let userWallet = {
 
             ...walletById,
-            credit: decimalPoint,
-            debit: decimalPoint,
-            balance: decimalPoint,
+            credit: 0,
+            debit: 0,
+            balance: 0,
             isActive: true
 
         }
 
-        let updatedData = await userModel.findOneAndUpdate({ userId: userId }, { $addToSet: { wallets: userWallet } }, { new: true })
+        let updatedData = await userModel.findOneAndUpdate({ _id: userId }, { $addToSet: { wallets: userWallet } }, { new: true })
 
+        console.log(updatedData)
+        
         return res.status(201).send({
             status: 201,
             message: 'Wallet added successfully',
@@ -212,15 +211,44 @@ const getUserByID = async (req, res, next) => {
 
         let userId = req.params.id
 
-        // if (!isValid(userId)) {
-        //     throw CreateError(400, `please enter a valid user id`)
-        // }
-
-        let userById = await userModel.findById(userId)
+        let userById = await userModel.findById(userId).lean()
 
         if (!userById) {
             throw CreateError(400, 'user Not Found')
         }
+
+        // let allcoins = await walletModel.find().lean()
+        // let userWallets = userById.wallets
+
+        // for (let i = 0; i < allcoins.length; i++) {
+
+        //     for (let j = 0; j < userWallets.length; j++) {
+
+        //         if (userWallets[j]['nameOfWallet'] === allcoins[i].nameOfWallet) {
+        //             allcoins[i].balance = userWallets[j].balance
+
+        //         } 
+
+
+        //     }
+
+
+        // }
+
+        // allcoins.forEach(e => {
+
+        //     userWallets.forEach(x => {
+
+        //         if (x['nameOfWallet'] === e['nameOfWallet']) {
+        //             e['balance'] = x['balance']
+        //         }
+
+        //     })
+
+        // })
+
+
+        // userById.wallets.sort((a, b) => a['walletId'] - b['walletId'])
 
         res.status(200)
         res.json({
