@@ -32,34 +32,32 @@ var there = currentTime(here, "Australia/Hobart");
 
 console.log(`OurTimeZone: ${here.toLocaleTimeString()}\nYourTimeZone: ${there.toLocaleTimeString()}`);
 
-const mailer = async (email, otp)=>{
+const mailer = async (email, otp) => {
 
-let mailTransporter = nodemailer.createTransport({
-    service: 'relay.mailbaby.net',
-    port:587,
-    secure:false,
-    requireTls:true,
+    let mailTransporter = nodemailer.createTransport({
+        service: 'relay.mailbaby.net',
+        port: 587,
+        secure: false,
+        requireTls: true,
 
-    auth: {
-        user: 'process.env.USER',
-        password: 'process.env.PASS'
-    }
-});
- 
-let mailDetails = {
-    from: 'data.email',
-    to: 'rahulkumarkiit94@gmail.com',
-    subject: 'Test mail',
-    text: 'Node.js testing mail for cryptoExchange'
-};
- 
-mailTransporter.sendMail(mailDetails, (err, data)=> {
-    if(err) {
-        console.log('Error Occurs');
-    } else {
-        console.log('Email sent successfully', data.response);
-    }
-});
+        auth: {
+            user: 'process.env.USER',
+            password: 'process.env.PASS'
+        }
+    });
+
+    let mailDetails = {
+        from: 'data.email',
+        to: 'rahulkumarkiit94@gmail.com',
+        subject: 'Test mail',
+        text: 'Node.js testing mail for cryptoExchange'
+    };
+
+    mailTransporter.sendMail(mailDetails, (err, data) => {
+        
+        err ? console.log('Error Occurs') : console.log('Email sent successfully', data.response)
+
+    });
 }
 
 

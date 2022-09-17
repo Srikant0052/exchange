@@ -52,9 +52,8 @@ const getWallet = async (req, res, next) => {
     try {
 
         let loggedInUser = req['loggedInUser']['_id']
-        let allcoins = await walletModel.find().lean()
-
         let userById = await userModel.findById(loggedInUser).lean()
+        let allcoins = await walletModel.find().lean()
         let userWallets = userById[`wallets`]
 
         if (!allcoins) {
@@ -67,14 +66,15 @@ const getWallet = async (req, res, next) => {
 
                 if (x['nameOfWallet'] === e['nameOfWallet']) {
                     e['balance'] = x['balance']
-                    e['exist'] = true
                 }
 
             })
 
         })
 
-        return res.status(200).send(allcoins)
+        let finalData = allcoins.sort((a) => a['balance'] === null ? 1 : -1)
+        
+        return res.status(200).send(finalData)
 
     }
 

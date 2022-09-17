@@ -213,52 +213,17 @@ const getUserByID = async (req, res, next) => {
     try {
 
         let userId = req.params.id
-
         let userById = await userModel.findById(userId).lean()
 
         if (!userById) {
             throw CreateError(400, 'user Not Found')
         }
 
-        // let allcoins = await walletModel.find().lean()
-        // let userWallets = userById.wallets
-
-        // for (let i = 0; i < allcoins.length; i++) {
-
-        //     for (let j = 0; j < userWallets.length; j++) {
-
-        //         if (userWallets[j]['nameOfWallet'] === allcoins[i].nameOfWallet) {
-        //             allcoins[i].balance = userWallets[j].balance
-
-        //         } 
-
-
-        //     }
-
-
-        // }
-
-        // allcoins.forEach(e => {
-
-        //     userWallets.forEach(x => {
-
-        //         if (x['nameOfWallet'] === e['nameOfWallet']) {
-        //             e['balance'] = x['balance']
-        //         }
-
-        //     })
-
-        // })
-
-
-        // userById.wallets.sort((a, b) => a['walletId'] - b['walletId'])
-
         res.status(200)
         res.json({
             message: 'success',
             User: userById
         })
-
 
     } catch (error) {
         next(error)
@@ -267,13 +232,8 @@ const getUserByID = async (req, res, next) => {
 
 const emailSend = async (req, res, next) => {
 
-
-
         let data = await userModel.findOne({ email: req.body.email })
-        //  console.log(data)
-        // const response = {}
         let otpCode;
-
         if (data) {
 
             otpCode = Number(random(4, ["0", "9"]))
@@ -282,10 +242,6 @@ const emailSend = async (req, res, next) => {
                 message: "email is not present in Database"
             })
         }
-
-        // nodemailer boilerplate code 
-
-        
 
         let otpData = {
 
@@ -296,8 +252,6 @@ const emailSend = async (req, res, next) => {
         }
 
         let resp = await otpModel.create(otpData)
-        console.log(resp)
-        // console.log(resp)
         var transport = nodemailer.createTransport({
             host: "relay.mailbaby.net",
             port: 587,
@@ -337,10 +291,9 @@ const emailSend = async (req, res, next) => {
 const changePassword = async (req, res, next) => {
 
     try {
+
         let {email , code} = req.body
         let data = await otpModel.findOne({ email, code })
-        // const response = {}
-        // console.log(data)
         if (data) {
             let currentTime = new Date().getTime()
             let diff = data.expireIn - currentTime
@@ -360,7 +313,6 @@ const changePassword = async (req, res, next) => {
             }
         }
 
-        
     } catch (error) {
         next(error)
     }

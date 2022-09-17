@@ -31,9 +31,18 @@ const transactionModel = new mongoose.Schema({
         unique: true
     },
 
+    publicAddress: {
+        type: String,
+    },
+
     transactionNumber: {
         type: String,
         unique: true,
+    },
+
+    transactionHash: {
+        type: String,
+        required: true
     },
 
     transactionTime: {

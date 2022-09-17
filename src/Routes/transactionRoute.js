@@ -1,13 +1,10 @@
 const router = require('express').Router();
-const { deposit, withdraw } = require('../Controller/transactionController');
+const { deposit, withdraw, updateTr } = require('../Controller/transactionController');
 
-
-// router.get('/testing', (req, res) => {
-//     res.send('hellow from server')
-// })
 
 router.post('/:userId/addTransaction/deposit', deposit);
 router.post('/:userId/addTransaction/withdraw', withdraw);
+router.put('/updatetr/:userId', updateTr)
 
 
 module.exports = router;
