@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-const transactionModel = require('../Models/trModels/allTransactions')
-const creditTrModel = require('../Models/trModels/creditTr')
-=======
 const allTransactionModel = require('../Models/trModels/allTransactions');
 const creditModel = require('../Models/trModels/creditTr');
 const debitModel = require('../Models/trModels/debitTr');
 
->>>>>>> e63c5b2ec33f875052bb4761846a33d71cde8ecc
 const userModel = require('../Models/userModel');
 const { random } = require('../utils/helper');
 const CreateError = require('http-errors');
@@ -314,4 +309,4 @@ const getTrById = async (req, res, next) => {
 
 
 
-module.exports = { deposit, withdraw, updateTr, getTrById };
+module.exports = { deposit, withdraw, updateTr, getTrById, creditUpdate, debitUpdate };

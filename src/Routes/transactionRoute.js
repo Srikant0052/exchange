@@ -1,9 +1,5 @@
 const router = require('express').Router();
-<<<<<<< HEAD
-const { deposit, withdraw, updateTr, getTrById } = require('../Controller/transactionController');
-=======
-const { deposit, withdraw, updateTr, creditUpdate, debitUpdate } = require('../Controller/transactionController');
->>>>>>> e63c5b2ec33f875052bb4761846a33d71cde8ecc
+const { deposit, withdraw, updateTr, getTrById, creditUpdate, debitUpdate } = require('../Controller/transactionController');
 
 
 router.post('/:userId/addTransaction/deposit', deposit);
