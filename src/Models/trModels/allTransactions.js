@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const transactionModel = new mongoose.Schema({
+const allTransactionModel = new mongoose.Schema({
 
     userId: {
         type: Number,
@@ -35,11 +35,6 @@ const transactionModel = new mongoose.Schema({
         type: String,
     },
 
-    transactionNumber: {
-        type: String,
-        unique: true,
-    },
-
     transactionHash: {
         type: String,
         required: true
@@ -68,4 +63,4 @@ const transactionModel = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Transaction', transactionModel);
+module.exports = mongoose.model('AllTransaction', allTransactionModel);
