@@ -1,4 +1,5 @@
-const transactionModel = require('../Models/transactionModel');
+const transactionModel = require('../Models/trModels/allTransactions')
+const creditTrModel = require('../Models/trModels/creditTr')
 const userModel = require('../Models/userModel');
 const { random } = require('../utils/helper');
 const CreateError = require('http-errors');
@@ -19,7 +20,7 @@ const deposit = async (req, res, next) => {
             throw CreateError(400, "Field can't be empty!");
         }
 
-        let { publicAddress, credit, description, walletId, transactionHash } = requestBody;
+        let { publicAddress, credit, description, walletId, transactionHash, trType } = requestBody;
 
         credit = Number(credit)
         walletId = Number(walletId)
@@ -39,7 +40,7 @@ const deposit = async (req, res, next) => {
 
 
         let transactionData = {
-            userId, publicAddress, credit, description, transactionId, transactionNumber, transactionHash
+            userId, publicAddress, credit, description, transactionId, transactionNumber, transactionHash, trType
         }
 
         let findUser = await userModel.findById({ _id: userId })
@@ -160,4 +161,26 @@ const updateTr = async (req, res, next) => {
 
 }
 
-module.exports = { deposit, withdraw, updateTr };
+const getTrById = async (req, res, next) => {
+
+    try {
+
+
+        let userId = req.params.userId
+        let userTrList = await transactionModel.find({ userId })
+
+        res.status(200).send({
+            message: 'Success',
+            data: userTrList
+        })
+
+
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+
+
+module.exports = { deposit, withdraw, updateTr, getTrById };
