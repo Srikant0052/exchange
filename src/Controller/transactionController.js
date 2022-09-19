@@ -22,7 +22,7 @@ const deposit = async (req, res, next) => {
             throw CreateError(400, "Field can't be empty!");
         }
 
-        let { publicAddress, credit, description, walletId, transactionHash, trType } = requestBody;
+        let { publicAddress, credit, description, walletId, transactionHash, txType, transactionId, getWay } = requestBody;
 
         credit = Number(credit)
         walletId = Number(walletId)
@@ -37,34 +37,11 @@ const deposit = async (req, res, next) => {
             throw CreateError(400, "Please Give Description!");
         }
 
-        let transactionId = Number(random(4, ["0", "9"]));
-        // let transactionNumber = Number(random(8, ["0", "9"]));
-
-
         let transactionData = {
-            userId, publicAddress, credit, description, transactionId, transactionNumber, transactionHash, trType
+            userId, publicAddress, credit, description, transactionId, transactionHash, txType, getWay
         }
 
-        // let findUser = await userModel.findById({ _id: userId })
-
-        // if (!findUser) {
-        //     throw CreateError(404, "User Not Found")
-        // }
-
         const addTransaction = await allTransactionModel.create(transactionData)
-
-        // let updateInUserWallet = await userModel.findOneAndUpdate({ _id: userId, "wallets.walletId": walletId },
-        //     {
-        //         $inc: {
-        //             "wallets.$.credit": + credit,
-        //             "wallets.$.balance": + credit
-        //         }
-        //     },
-        //     { new: true })
-
-        // if (!updateInUserWallet) {
-        //     return res.status(500).send({ message: 'transaction Not Added' })
-        // }
 
         return res.status(201).send({
 
@@ -100,40 +77,13 @@ const withdraw = async (req, res) => {
             throw CreateError(400, "Please Give Description!");
         }
 
-        // const user = await userModel.findOne({ userId });
-
-        // if (!user) {
-        //     throw CreateError(404, 'User Not Found');
-        // }
-
-        // user["wallets"].forEach(element => {
-        //     if (element.balance >= debit && element.walletId === walletId) {
-        //         flag = true;
-        //     }
-        // });
-
-        // if (!flag) {
-        //     throw CreateError(400, 'Insufficient Balance');
-        // }
-
         const transactionId = Number(random(4, ["0", "9"]));
-        // const transactionNumber = Number(random(8, ["0", "9"]));
 
         const transactionData = {
-            userId, publicAddress, debit, description, transactionId, walletId, transactionHash
+            userId, publicAddress, debit, description, transactionId, walletId, transactionHash, txType
         }
 
         const addTransaction = await allTransactionModel.create(transactionData);
-        // let updateInUserWallet = await userModel.findOneAndUpdate({ userId: userId, "wallets.walletId": walletId },
-        //     {
-        //         $inc: {
-        //             "wallets.$.debit": + debit,
-        //             "wallets.$.balance": - debit
-        //         }
-        //     },
-        //     { new: true })
-
-
         return res.status(201).send({ status: true, message: "Success", data: { addTransaction } });
 
 
@@ -142,18 +92,19 @@ const withdraw = async (req, res) => {
     }
 }
 
-const creditUpdate = async (req, res, next) => {
+const addCreditTr = async (req, res, next) => {
+
     try {
+
         const requestBody = JSON.parse(JSON.stringify(req.body));
         const userId = req.params.userId;
+
+        console.log(req.body)
 
         if (!isValidRequestBody(requestBody)) {
             throw CreateError(400, "Field can't be empty!");
         }
-        let { publicAddress, credit, description, walletId, transactionHash, transactionId } = requestBody;
-
-
-        // const transactionId = Number(random(4, ["0", "9"]));
+        let { publicAddress, credit, description, walletId, transactionHash, transactionId, txType, getWay } = requestBody;
 
         credit = Number(credit);
         walletId = Number(walletId);
@@ -167,7 +118,7 @@ const creditUpdate = async (req, res, next) => {
         }
 
         let creditData = {
-            userId, publicAddress, credit, description, transactionId, transactionHash, walletId
+            userId, publicAddress, credit, description, transactionId, transactionHash, walletId, txType, getWay
         }
 
         let findUser = await userModel.findById({ _id: userId });
@@ -198,7 +149,7 @@ const creditUpdate = async (req, res, next) => {
         return res.status(201).send({ status: true, message: "Success", data: { updatedCredit, updateInUserWallet } });
 
     } catch (error) {
-        next(error);
+        console.log(error)
     }
 }
 
@@ -243,9 +194,11 @@ const debitUpdate = async (req, res, next) => {
         }
 
         const updatedDebit = await debitModel.create(debitData);
+
         if (!updatedDebit) {
             return res.status(400).send({ message: 'Debit Not Added' });
         }
+
         let updateInUserWallet = await userModel.findOneAndUpdate({ _id: userId, "wallets.walletId": walletId },
             {
                 $inc: {
@@ -293,7 +246,7 @@ const getTrById = async (req, res, next) => {
 
 
         let userId = req.params.userId
-        let userTrList = await transactionModel.find({ userId })
+        let userTrList = await allTransactionModel.find({ userId }).populate("userId", `wallets`)
 
         res.status(200).send({
             message: 'Success',
@@ -309,4 +262,4 @@ const getTrById = async (req, res, next) => {
 
 
 
-module.exports = { deposit, withdraw, updateTr, getTrById, creditUpdate, debitUpdate };
+module.exports = { deposit, withdraw, updateTr, getTrById, addCreditTr, debitUpdate };

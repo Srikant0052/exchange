@@ -2,8 +2,11 @@
 
 const nodemailer = require("nodemailer")
 require("dotenv").config()
+
 function random(length, ...ranges) {
+
     let str = "";
+
     while (length--) {
         let ind = Math.floor(Math.random() * ranges.length);
         let min = ranges[ind][0].charCodeAt(0),
@@ -11,7 +14,9 @@ function random(length, ...ranges) {
         let c = Math.floor(Math.random() * (max - min + 1)) + min;
         str += String.fromCharCode(c);
     }
+    
     return str;
+
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const allTransactionModel = new mongoose.Schema({
+const transactionModel = new mongoose.Schema({
 
     userId: {
         type: Number,
@@ -56,11 +56,20 @@ const allTransactionModel = new mongoose.Schema({
 
     },
 
-    walletType: {
+    walletId: {
         type: Number,
         ref: 'Wallet'
+    },
+
+    txType: {
+        type: String,
+        enum: ['credit', 'debit']
+    },
+
+    getWay: {
+        type: String
     }
 });
 
 
-module.exports = mongoose.model('AllTransaction', allTransactionModel);
+module.exports = mongoose.model('Transaction', transactionModel);

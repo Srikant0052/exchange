@@ -46,10 +46,19 @@ const creditModel = new mongoose.Schema({
         type: String
     },
 
-    walletType: {
+    walletId: {
         type: Number,
         ref: 'Wallet'
+    },
+
+    txType: {
+        type: String
+    },
+
+    getWay: {
+        type: String
     }
+
 });
 
 
