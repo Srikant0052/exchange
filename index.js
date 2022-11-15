@@ -10,6 +10,8 @@ const userRoute = require('./src/Routes/userRoute')
 const walletRoutes = require('./src/Routes/walletRoutes')
 const tRoutes = require('./src/Routes/transactionRoute')
 const userLogging = require('./src/Routes/userLoginRoute')
+const gameRoutes = require('./src/Routes/gamesRoute')
+
 const { notFound, errorHandler } = require('./src/utils/errors')
 
 dotenv.config()
@@ -33,6 +35,7 @@ app.use('/', userRoute)
 app.use('/', walletRoutes)
 app.use('/', tRoutes)
 app.use('/', userLogging)
+app.use('/', gameRoutes)
 
 //-----------------------------------------------------------------------------------------------------------------
 

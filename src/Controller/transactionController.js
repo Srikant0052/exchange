@@ -22,7 +22,7 @@ const deposit = async (req, res, next) => {
             throw CreateError(400, "Field can't be empty!");
         }
 
-        let { publicAddress, credit, description, walletId, transactionHash, txType, transactionId, getWay } = requestBody;
+        let { publicAddress, credit, description, walletId, transactionHash, txType, transactionId, getWay, coinName } = requestBody;
 
         credit = Number(credit)
         walletId = Number(walletId)
@@ -38,7 +38,7 @@ const deposit = async (req, res, next) => {
         }
 
         let transactionData = {
-            userId, publicAddress, credit, description, transactionId, transactionHash, txType, getWay
+            userId, publicAddress, credit, description, transactionId, transactionHash, txType, getWay, coin: coinName
         }
 
         const addTransaction = await allTransactionModel.create(transactionData)
@@ -104,7 +104,8 @@ const addCreditTr = async (req, res, next) => {
         if (!isValidRequestBody(requestBody)) {
             throw CreateError(400, "Field can't be empty!");
         }
-        let { publicAddress, credit, description, walletId, transactionHash, transactionId, txType, getWay } = requestBody;
+        
+        let { publicAddress, credit, description, walletId, transactionHash, transactionId, txType, getWay, coinName } = requestBody;
 
         credit = Number(credit);
         walletId = Number(walletId);
@@ -118,7 +119,7 @@ const addCreditTr = async (req, res, next) => {
         }
 
         let creditData = {
-            userId, publicAddress, credit, description, transactionId, transactionHash, walletId, txType, getWay
+            userId, publicAddress, credit, description, transactionId, transactionHash, walletId, txType, getWay, coin: coinName
         }
 
         let findUser = await userModel.findById({ _id: userId });
@@ -162,7 +163,7 @@ const debitUpdate = async (req, res, next) => {
         if (!isValidRequestBody(requestBody)) {
             throw CreateError(400, "Field can't be empty!");
         }
-        let { publicAddress, debit, description, walletId, transactionHash, transactionId } = requestBody;
+        let { publicAddress, debit, description, walletId, transactionHash, transactionId, coinName } = requestBody;
 
         debit = Number(debit);
         walletId = Number(walletId);
@@ -190,7 +191,7 @@ const debitUpdate = async (req, res, next) => {
         }
 
         let debitData = {
-            userId, publicAddress, debit, description, transactionId, transactionHash, walletId
+            userId, publicAddress, debit, description, transactionId, transactionHash, walletId, coin: coinName
         }
 
         const updatedDebit = await debitModel.create(debitData);
@@ -202,8 +203,10 @@ const debitUpdate = async (req, res, next) => {
         let updateInUserWallet = await userModel.findOneAndUpdate({ _id: userId, "wallets.walletId": walletId },
             {
                 $inc: {
+
                     "wallets.$.debit": + debit,
                     "wallets.$.balance": - debit
+                    
                 }
             },
             { new: true });
@@ -224,13 +227,14 @@ const updateTr = async (req, res, next) => {
     try {
 
         let userId = req.params.userId;
+        let transactionId = req.params.transactionId
         let { status } = req.body;
 
         let updateQuery = {
             status
         }
 
-        const updatedTr = await allTransactionModel.findOneAndUpdate({ userId }, updateQuery, { new: true });
+        const updatedTr = await allTransactionModel.findOneAndUpdate({ userId, transactionId }, updateQuery, { new: true });
         console.log(updatedTr);
 
 
@@ -246,7 +250,27 @@ const getTrById = async (req, res, next) => {
 
 
         let userId = req.params.userId
-        let userTrList = await allTransactionModel.find({ userId }).populate("userId", `wallets`)
+        let userTrList = await allTransactionModel.find({ userId }).populate("userId", `wallets`).lean()
+
+        if (!userTrList || userTrList.length <= 0) {
+            throw CreateError(404, `data not found`)
+        }
+
+        let userWallet = userTrList[0]['userId']['wallets']
+
+
+        userTrList.forEach(e => {
+
+            userWallet.forEach(x => {
+
+                if (e.coin == x.nameOfWallet) {
+                    e['avBalance'] = x.balance
+                    delete e.userId
+                }
+
+            })
+
+        })
 
         res.status(200).send({
             message: 'Success',
@@ -260,6 +284,31 @@ const getTrById = async (req, res, next) => {
 
 }
 
+const getTrByCoinName = async (req, res, next) => {
+
+    try {
+
+        let { userId, coinName } = req.params
+
+        let allTrByCoinNameAndId = await allTransactionModel.find({
+            userId: userId,
+            coin: coinName
+        })
+
+        if (!allTrByCoinNameAndId) throw CreateError(404, `Transactions not found`)
+
+        return res.status(200).send({
+            message: `Success`,
+            data: allTrByCoinNameAndId
+        })
 
 
-module.exports = { deposit, withdraw, updateTr, getTrById, addCreditTr, debitUpdate };
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+
+
+module.exports = { deposit, withdraw, updateTr, getTrById, addCreditTr, debitUpdate, getTrByCoinName };

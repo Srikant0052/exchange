@@ -51,6 +51,10 @@ const creditModel = new mongoose.Schema({
         ref: 'Wallet'
     },
 
+    coin: {
+        type: String
+    },
+
     txType: {
         type: String
     },

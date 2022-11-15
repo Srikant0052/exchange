@@ -167,6 +167,7 @@ const addWallet = async (req, res, next) => {
 
         let walletById = await walletModel.findOne({ walletId: walletId }).select({ nameOfWallet: 1, walletId: 1, _id: 0 }).lean()
         console.log(walletById)
+        
         let userWallet = {
 
             ...walletById,
@@ -320,8 +321,100 @@ const changePassword = async (req, res, next) => {
 }
 
 
+const getBitsBalance = async (req, res, next) => {
+
+    try {
+
+        let id = req.params.id
+        let balance = await userModel.findById(id).lean()
+
+        let { wallets } = balance
+        let bits = wallets.filter(e => e['nameOfWallet'] == 'Bits')
+        if (bits.length <= 0) throw CreateError(400, `You Dont Have Bits Wallet`);
+
+        console.log(bits[0]['balance'])
 
 
+        return res.status(200).send({
+            message: 'success',
+            balance: bits[0]['balance']
+        })
+
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+
+}
+
+const updateInBitsWallet = async (req, res, next) => {
+
+    try {
+
+        let balance = null
+        let id = req.params.id
+        let { type, amt } = req.body
+
+        console.log(type, amt)
+
+        if (type == 'dec') {
+
+            balance = await userModel.findOneAndUpdate({
+                _id: id,
+                'wallets.nameOfWallet': "Bits"
+            },
+                {
+
+                    $inc: {
+                        "wallets.$.balance": - amt
+                    }
+
+                },
+                {
+                    new: true
+                }
+            ).lean()
+
+            let avilableBal = balance['wallets'].filter(e => e['nameOfWallet'] == 'Bits').map(e => e['balance'])
+            return res.status(200).send({
+                message: 'balance debited successFully',
+                balance: avilableBal[0]
+            })
+
+        }
+
+        if (type == 'inc') {
+
+            let balance = await userModel.findOneAndUpdate({
+                _id: id,
+                'wallets.nameOfWallet': "Bits"
+            },
+                {
+
+                    $inc: {
+                        "wallets.$.balance": + amt,
+                    }
+
+                },
+                {
+                    new: true
+                }
+            ).lean()
+
+            let avilableBal = balance['wallets'].filter(e => e['nameOfWallet'] == 'Bits').map(e => e['balance'])
+            return res.status(200).send({
+                message: 'balance credited successFully',
+                balance: avilableBal[0]
+            })
+
+        }
+
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+
+}
 
 module.exports = {
 
@@ -332,5 +425,7 @@ module.exports = {
     getUserByID,
     emailSend,
     changePassword,
+    getBitsBalance,
+    updateInBitsWallet
 
 }

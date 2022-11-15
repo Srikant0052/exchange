@@ -61,6 +61,10 @@ const transactionModel = new mongoose.Schema({
         ref: 'Wallet'
     },
 
+    coin: {
+        type: String
+    },
+
     txType: {
         type: String,
         enum: ['credit', 'debit']

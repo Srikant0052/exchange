@@ -17,10 +17,12 @@ const createWallet = async (req, res, next) => {
         let isnameOfWallet = await walletModel.findOne({ shortName })
 
         if (isnameOfWallet) {
+
             return res.status(201).send({
                 status: 201,
                 message: "wallet created"
             })
+            
         }
 
         let newWallet = {

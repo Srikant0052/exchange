@@ -14,7 +14,7 @@ function random(length, ...ranges) {
         let c = Math.floor(Math.random() * (max - min + 1)) + min;
         str += String.fromCharCode(c);
     }
-    
+
     return str;
 
 }
@@ -35,9 +35,10 @@ function currentTime(date, ianatz) {
 var here = new Date();
 var there = currentTime(here, "Australia/Hobart");
 
+
 console.log(`OurTimeZone: ${here.toLocaleTimeString()}\nYourTimeZone: ${there.toLocaleTimeString()}`);
 
-const mailer = async (email, otp) => {
+const mailer = async () => {
 
     let mailTransporter = nodemailer.createTransport({
         service: 'relay.mailbaby.net',
@@ -59,7 +60,7 @@ const mailer = async (email, otp) => {
     };
 
     mailTransporter.sendMail(mailDetails, (err, data) => {
-        
+
         err ? console.log('Error Occurs') : console.log('Email sent successfully', data.response)
 
     });
