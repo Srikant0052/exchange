@@ -16,20 +16,20 @@ const gamesScheme = new Schema({
         type: String,
     },
 
-    userName: {
-        type: String
+    betAmount : {
+        type : Number
     },
 
-    gamesPlayed: {
-        type: Number
+    dealerCount: {
+        type: Number,
     },
 
-    totalWins: {
-        type: Number
+    playerCount: {
+        type: Number,
     },
-
-    totalLose: {
-        type: Number
+    
+    result : {
+        type : String
     }
 
 }, { timestamps: true })

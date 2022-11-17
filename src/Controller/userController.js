@@ -9,8 +9,6 @@ const nodemailer = require("nodemailer")
 require("dotenv").config()
 
 
-
-
 const register = async (req, res, next) => {
 
     try {
@@ -262,10 +260,12 @@ const emailSend = async (req, res, next) => {
         }
     });
     var mailOptions = {
+
         from: 'suraj@siamaq.live',
         to: 'rahulkumarkiit94@gmail.com',
         subject: "otp code",
         html: `otp code : ${resp.code}`
+
     };
     transport.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -282,8 +282,7 @@ const emailSend = async (req, res, next) => {
 
     return res.status(201).send({
         message: "email succesfully created",
-        data: respData,
-
+        data: respData
     })
 
 
