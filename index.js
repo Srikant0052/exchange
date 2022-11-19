@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-let port = process.env.PORT;
+let port = process.env.PORT || 4000;
 const Data_Base_Url = process.env.DB_URL;
 
 mongoose
